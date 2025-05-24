@@ -4,15 +4,28 @@ interface AtCoderProblem {
     url: string;
 }
 
-interface Solution {
+// Interface for data read directly from solutions.json
+interface SolutionDataFromJSON {
     name: string;
     rarity: "C" | "R" | "SR" | "UR" | "LR";
-    rarityJP: string;
-    color: string; // This will be the CSS variable string like 'var(--rarity-c)'
-    weight: number;
     description?: string;
     atcoderProblems?: AtCoderProblem[];
 }
+
+// Interface for the Solution object used throughout the application
+interface Solution extends SolutionDataFromJSON {
+    rarityJP: string;
+    color: string; // This will be the CSS variable string like 'var(--rarity-c)'
+    weight: number;
+}
+
+const rarityToInfoMap: Record<SolutionDataFromJSON["rarity"], { jp: string; colorVar: string; weight: number }> = {
+    "C":  { jp: "コモン",       colorVar: "var(--rarity-c)",  weight: 50 },
+    "R":  { jp: "レア",         colorVar: "var(--rarity-r)",  weight: 30 },
+    "SR": { jp: "スーパーレア", colorVar: "var(--rarity-sr)", weight: 15 },
+    "UR": { jp: "ウルトラレア", colorVar: "var(--rarity-ur)", weight: 7  },
+    "LR": { jp: "レジェンダリー",colorVar: "var(--rarity-lr)", weight: 2  },
+};
 
 let solutions: Solution[] = [];
 let totalWeight = 0;
@@ -25,11 +38,36 @@ async function loadSolutions(): Promise<void> {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        solutions = await response.json();
+        const solutionsData: SolutionDataFromJSON[] = await response.json();
+        
+        solutions = solutionsData.map(data => {
+            const info = rarityToInfoMap[data.rarity];
+            if (!info) {
+                // This case should ideally not happen if rarities in JSON are always valid
+                // But as a fallback, assign 'C' rarity info
+                console.warn(`Unknown rarity "${data.rarity}" for solution "${data.name}". Defaulting to Common.`);
+                const defaultInfo = rarityToInfoMap["C"];
+                 return {
+                    ...data,
+                    rarityJP: defaultInfo.jp,
+                    color: defaultInfo.colorVar,
+                    weight: defaultInfo.weight,
+                };
+            }
+            return {
+                ...data,
+                rarityJP: info.jp,
+                color: info.colorVar,
+                weight: info.weight,
+            };
+        });
+
         totalWeight = solutions.reduce((sum, s) => sum + s.weight, 0);
+
     } catch (error) {
         console.error("Failed to load solutions:", error);
         solutions = []; 
+        totalWeight = 0; // Ensure totalWeight is 0 if loading fails
     }
 }
 
@@ -42,7 +80,19 @@ function addSolutionToHistory(solution: Solution): void {
 
 function selectSolution(): Solution {
     if (solutions.length === 0) {
-        throw new Error("Solutions not loaded yet or empty.");
+        // This could happen if loadSolutions failed or solutions.json is empty
+        // Return a default "error" solution or handle appropriately
+        console.error("No solutions available to select from.");
+        // Fallback to a dummy solution to prevent crashing, ideally UI should show an error.
+        const fallbackInfo = rarityToInfoMap["C"];
+        return {
+            name: "エラー",
+            rarity: "C",
+            description: "解法の読み込みに失敗しました。",
+            rarityJP: fallbackInfo.jp,
+            color: fallbackInfo.colorVar,
+            weight: fallbackInfo.weight,
+        };
     }
     let randomWeight = Math.random() * totalWeight;
     for (const solution of solutions) {
@@ -51,7 +101,8 @@ function selectSolution(): Solution {
         }
         randomWeight -= solution.weight;
     }
-    return solutions[solutions.length - 1]; // Fallback
+    // Fallback, should ideally not be reached if totalWeight is correct
+    return solutions[solutions.length - 1]; 
 }
 
 function createSolutionCardElement(solution: Solution): HTMLElement {
@@ -65,7 +116,6 @@ function createSolutionCardElement(solution: Solution): HTMLElement {
     const rarityTagIndicator = document.createElement('div');
     rarityTagIndicator.classList.add('rarity-tag-indicator');
     rarityTagIndicator.textContent = solution.rarity;
-    // Rarity specific tag styling is primarily handled by CSS via .rarity-X .rarity-tag-indicator
 
     const rarityTextElement = document.createElement('p');
     rarityTextElement.classList.add('solution-rarity-text');
@@ -82,9 +132,8 @@ function createSolutionCardElement(solution: Solution): HTMLElement {
         nameElement.classList.add('lr-name-effect');
     }
     
-    card.appendChild(cardHeader); // Add header first
+    card.appendChild(cardHeader); 
     card.appendChild(nameElement);
-    // Removed rarityTextElement from here as it's now in header
 
     if (solution.description) {
         const descriptionElement = document.createElement('p');
@@ -152,7 +201,6 @@ function createMiniCardElement(solution: Solution): HTMLElement {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const pullButton = document.getElementById('pull-gacha-button') as HTMLButtonElement;
-    // pullFourButton is removed
     const resultArea = document.getElementById('gacha-result-area') as HTMLElement;
     const placeholder = document.getElementById('gacha-placeholder') as HTMLElement;
 
@@ -161,7 +209,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const historyContent = document.getElementById('history-content') as HTMLElement;
     const closeHistoryButton = document.getElementById('close-history-button') as HTMLButtonElement;
 
-    // Check for essential elements
     if (!pullButton || !resultArea || !placeholder || 
         !viewHistoryButton || !historyModal || !historyContent || !closeHistoryButton) {
         console.error('Required DOM elements not found. Check IDs.');
@@ -173,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     resultArea.style.display = 'none';
     placeholder.style.display = 'flex'; 
     placeholder.innerHTML = `<p>データ準備中...</p><div class="loading-spinner"></div>`;
-    pullButton.disabled = true; // Disable initially
+    pullButton.disabled = true; 
     viewHistoryButton.disabled = true;
 
 
@@ -200,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         placeholder.style.display = 'none';
         resultArea.innerHTML = ''; 
-        resultArea.style.display = 'flex'; // For centering single card
+        resultArea.style.display = 'flex'; 
         
         try {
             const chosenSolution = selectSolution();
@@ -217,7 +264,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         viewHistoryButton.disabled = false;
     });
 
-    // pullFourButton event listener is removed
 
     viewHistoryButton.addEventListener('click', () => {
         historyContent.innerHTML = ''; 
