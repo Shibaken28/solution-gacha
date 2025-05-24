@@ -1,0 +1,293 @@
+:root {
+    --font-primary: 'Noto Sans JP', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+
+    --color-bg: #222831;
+    --color-surface: #393E46;
+    --color-primary: #00ADB5;
+    --color-primary-dark: #007A7F;
+    --color-text-light: #EEEEEE;
+    --color-text-dark: #222831;
+    --color-accent: #FFD369;
+
+    --rarity-c: #90A4AE; /* Slate Gray */
+    --rarity-r: #42A5F5; /* Light Blue */
+    --rarity-sr: #AB47BC; /* Purple */
+    --rarity-ur: #FFCA28; /* Amber/Gold */
+    --rarity-lr: #EF5350; /* Red */
+
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.3);
+    --border-radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-primary);
+    background-color: var(--color-bg);
+    color: var(--color-text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px; /* Max width for the gacha machine */
+}
+
+#gacha-machine {
+    background-color: var(--color-surface);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    min-height: 350px; /* Ensure space for result card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#gacha-result-area {
+    min-height: 200px; /* Adjusted for content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 2px dashed var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.placeholder-text p {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    opacity: 0.7;
+}
+
+.result-card {
+    background-color: var(--color-bg);
+    color: var(--color-text-light);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    border-left: 10px solid; /* For rarity color */
+    animation: fadeInResult 0.5s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes fadeInResult {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rarity-banner {
+    position: absolute;
+    top: 10px;
+    right: -35px;
+    background-color: var(--rarity-c); /* Default */
+    color: var(--color-text-dark);
+    padding: 5px 30px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+}
+
+.solution-name {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-accent);
+    word-wrap: break-word;
+}
+
+.solution-rarity-text {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.solution-description {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    opacity: 0.9;
+}
+
+#gacha-controls {
+    margin-top: 10px;
+}
+
+#pull-gacha-button {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+#pull-gacha-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+#pull-gacha-button:active {
+    transform: scale(0.98);
+}
+
+#pull-gacha-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#gacha-animation-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+#gacha-animation-area .animation-content {
+    background-color: var(--color-surface);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+#gacha-animation-area p {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+}
+
+.spinner {
+    border: 6px solid rgba(255,255,255,0.2);
+    border-left-color: var(--color-primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    #pull-gacha-button {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+    }
+    .result-card {
+        padding: 15px;
+    }
+    .solution-name {
+        font-size: 1.5rem;
+    }
+    .solution-rarity-text {
+        font-size: 0.9rem;
+    }
+     #gacha-machine {
+        padding: 20px;
+    }
+}
+
+/* Rarity specific styles for result card */
+.rarity-C .rarity-banner { background-color: var(--rarity-c); color: var(--color-text-dark); }
+.rarity-C { border-left-color: var(--rarity-c); }
+.rarity-C .solution-rarity-text { color: var(--rarity-c); }
+
+.rarity-R .rarity-banner { background-color: var(--rarity-r); color: var(--color-text-dark); }
+.rarity-R { border-left-color: var(--rarity-r); }
+.rarity-R .solution-rarity-text { color: var(--rarity-r); }
+
+.rarity-SR .rarity-banner { background-color: var(--rarity-sr); color: var(--color-text-light); }
+.rarity-SR { border-left-color: var(--rarity-sr); }
+.rarity-SR .solution-rarity-text { color: var(--rarity-sr); }
+
+.rarity-UR .rarity-banner { background-color: var(--rarity-ur); color: var(--color-text-dark); }
+.rarity-UR { border-left-color: var(--rarity-ur); }
+.rarity-UR .solution-rarity-text { color: var(--rarity-ur); }
+
+.rarity-LR .rarity-banner {
+    background: linear-gradient(45deg, var(--rarity-lr), var(--rarity-ur), #7b1fa2); /* LR special gradient */
+    color: var(--color-text-light);
+}
+.rarity-LR { border-left-color: var(--rarity-lr); } /* Or a gradient border? Harder with just border-left */
+.rarity-LR .solution-rarity-text { color: var(--rarity-lr); }
+.rarity-LR .solution-name {
+    background: linear-gradient(45deg, var(--rarity-lr), var(--rarity-ur), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent; /* For non-webkit browsers */
+}
+
+

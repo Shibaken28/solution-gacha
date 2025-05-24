@@ -1,0 +1,5 @@
+# Node.js / npm / yarn
+node_modules/
+package-lock.json # プロジェクトによっては含めますが、チーム開発では含めることが多いです
+
+index.js

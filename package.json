@@ -1,0 +1,22 @@
+{
+  "name": "kaiketsu-gacha",
+  "version": "1.0.0",
+  "description": "A gacha game for competitive programming solutions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "serve ."
+  },
+  "keywords": [
+    "gacha",
+    "typescript",
+    "frontend"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "serve": "^14.2.3"
+  }
+}

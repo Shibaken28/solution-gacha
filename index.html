@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>解法ガチャ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.0.1",
+    "marked-highlight": "https://esm.sh/marked-highlight@^2.2.1",
+    "marked": "https://esm.sh/marked@^15.0.12",
+    "lit/": "https://esm.sh/lit@^3.3.0/",
+    "lit": "https://esm.sh/lit@^3.3.0",
+    "highlight.js": "https://esm.sh/highlight.js@^11.11.1"
+  }
+}
+</script>
+    <script type="module" src="index.js"></script>
+</head>
+<body>
+    <div id="app-container">
+        <header>
+            <h1>解法ガチャ</h1>
+        </header>
+        <main>
+            <div id="gacha-machine">
+                <div id="gacha-result-area" aria-live="polite" role="region">
+                    <!-- Result will be displayed here -->
+                    <div class="placeholder-text">
+                        <p>下のボタンを押して<br/>解法を召喚しよう！</p>
+                    </div>
+                </div>
+                <div id="gacha-animation-area" class="hidden" aria-live="assertive" role="alert">
+                    <div class="animation-content">
+                        <div class="spinner"></div>
+                        <p>解法を検索中...</p>
+                    </div>
+                </div>
+                <div id="gacha-controls">
+                    <button id="pull-gacha-button" aria-label="ガチャを引く">ガチャを引く</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>開発者の皆様に、素晴らしい解法との出会いがありますように。</p>
+        </footer>
+    </div>
+</body>
+</html>
