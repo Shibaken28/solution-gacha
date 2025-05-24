@@ -1,0 +1,188 @@
+
+[
+    {
+        "name": "全探索", "rarity": "C", "rarityJP": "コモン", "color": "var(--rarity-c)", "weight": 50, 
+        "description": "すべての可能性を試す基本的な手法。",
+        "atcoderProblems": [
+            {"name": "ABC081B - Shift only", "url": "https://atcoder.jp/contests/abc081/tasks/abc081_b"},
+            {"name": "ABC122B - ATCoder", "url": "https://atcoder.jp/contests/abc122/tasks/abc122_b"}
+        ]
+    },
+    {
+        "name": "貪欲法 (Greedy)", "rarity": "C", "rarityJP": "コモン", "color": "var(--rarity-c)", "weight": 50,
+        "description": "その場での最善手を選び続ける戦略。",
+        "atcoderProblems": [
+            {"name": "ABC086C - Traveling", "url": "https://atcoder.jp/contests/abc086/tasks/abc086_c"},
+            {"name": "AGC007A - Shik and Stone", "url": "https://atcoder.jp/contests/agc007/tasks/agc007_a"}
+        ]
+    },
+    {
+        "name": "シミュレーション", "rarity": "C", "rarityJP": "コモン", "color": "var(--rarity-c)", "weight": 50,
+        "description": "問題の指示通りに処理を追う。",
+        "atcoderProblems": [
+            {"name": "ABC136C - Build Stairs", "url": "https://atcoder.jp/contests/abc136/tasks/abc136_c"}
+        ]
+    },
+    {
+        "name": "ソート", "rarity": "C", "rarityJP": "コモン", "color": "var(--rarity-c)", "weight": 40,
+        "description": "データを特定の順序に並び替える。",
+        "atcoderProblems": [
+            {"name": "ABC088B - Card Game for Two", "url": "https://atcoder.jp/contests/abc088/tasks/abc088_b"}
+        ]
+    },
+    {
+        "name": "二分探索", "rarity": "C", "rarityJP": "コモン", "color": "var(--rarity-c)", "weight": 40,
+        "description": "ソート済み配列から効率的に要素を検索。",
+        "atcoderProblems": [
+            {"name": "ABC077C - Snuke Festival", "url": "https://atcoder.jp/contests/abc077/tasks/arc084_a"}
+        ]
+    },
+    {
+        "name": "しゃくとり法", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 30,
+        "description": "2つのポインタで範囲を効率的に走査。",
+        "atcoderProblems": [
+            {"name": "ABC098C - Attention", "url": "https://atcoder.jp/contests/abc098/tasks/arc098_a"}
+        ]
+    },
+    {
+        "name": "累積和", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 30,
+        "description": "区間和を高速に求める前処理。",
+        "atcoderProblems": [
+            {"name": "ABC106D - AtCoder Express 2", "url": "https://atcoder.jp/contests/abc106/tasks/abc106_d"}
+        ]
+    },
+    {
+        "name": "いもす法 (imos)", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 25,
+        "description": "区間への加算を効率的に処理。",
+        "atcoderProblems": [
+            {"name": "ABC014C - 使ってはいけないカード", "url": "https://atcoder.jp/contests/abc014/tasks/abc014_3"}
+        ]
+    },
+    {
+        "name": "動的計画法 (DP)", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 30,
+        "description": "部分問題の結果を再利用して最適解を導く。",
+        "atcoderProblems": [
+            {"name": "DPまとめコンテスト A - Frog 1", "url": "https://atcoder.jp/contests/dp/tasks/dp_a"},
+            {"name": "DPまとめコンテスト B - Frog 2", "url": "https://atcoder.jp/contests/dp/tasks/dp_b"}
+        ]
+    },
+    {
+        "name": "Union-Find木", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 25,
+        "description": "グループ分けを効率的に管理するデータ構造。",
+        "atcoderProblems": [
+            {"name": "ABC075C - Bridge", "url": "https://atcoder.jp/contests/abc075/tasks/abc075_c"}
+        ]
+    },
+    {
+        "name": "幅優先探索 (BFS)", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 25,
+        "description": "グラフを層ごとに探索。最短経路問題に。",
+        "atcoderProblems": [
+            {"name": "ABC007C - 幅優先探索", "url": "https://atcoder.jp/contests/abc007/tasks/abc007_3"}
+        ]
+    },
+    {
+        "name": "深さ優先探索 (DFS)", "rarity": "R", "rarityJP": "レア", "color": "var(--rarity-r)", "weight": 25,
+        "description": "グラフを深く探索。連結性判定などに。",
+        "atcoderProblems": [
+            {"name": "ATC001A - 深さ優先探索", "url": "https://atcoder.jp/contests/atc001/tasks/dfs_a"}
+        ]
+    },
+    {
+        "name": "ダイクストラ法", "rarity": "SR", "rarityJP": "スーパーレア", "color": "var(--rarity-sr)", "weight": 15,
+        "description": "単一始点の非負重み付きグラフ最短経路。",
+        "atcoderProblems": [
+            {"name": "ABC035D - トレジャーハント", "url": "https://atcoder.jp/contests/abc035/tasks/abc035_d"}
+        ]
+    },
+    {
+        "name": "ワーシャルフロイド法", "rarity": "SR", "rarityJP": "スーパーレア", "color": "var(--rarity-sr)", "weight": 15,
+        "description": "全点対最短経路を求めるアルゴリズム。",
+        "atcoderProblems": [
+            {"name": "ABC012D - バスと避けられない運命", "url": "https://atcoder.jp/contests/abc012/tasks/abc012_4"}
+        ]
+    },
+    {
+        "name": "最小全域木 (MST)", "rarity": "SR", "rarityJP": "スーパーレア", "color": "var(--rarity-sr)", "weight": 15,
+        "description": "グラフの全頂点を連結する最小コストの辺集合。",
+        "atcoderProblems": [
+            {"name": "ABC065D - Built?", "url": "https://atcoder.jp/contests/abc065/tasks/arc076_b"}
+        ]
+    },
+    {
+        "name": "トポロジカルソート", "rarity": "SR", "rarityJP": "スーパーレア", "color": "var(--rarity-sr)", "weight": 12,
+        "description": "有向非巡回グラフの頂点を順序付け。",
+        "atcoderProblems": [
+            {"name": "DPまとめコンテスト G - Longest Path", "url": "https://atcoder.jp/contests/dp/tasks/dp_g"}
+        ]
+    },
+    {
+        "name": "桁DP", "rarity": "SR", "rarityJP": "スーパーレア", "color": "var(--rarity-sr)", "weight": 12,
+        "description": "数値の桁ごとに状態を持つDP。",
+        "atcoderProblems": [
+            {"name": "TDPC E - 数", "url": "https://atcoder.jp/contests/tdpc/tasks/tdpc_number"}
+        ]
+    },
+    {
+        "name": "セグメント木", "rarity": "UR", "rarityJP": "ウルトラレア", "color": "var(--rarity-ur)", "weight": 7,
+        "description": "区間クエリを対数時間で処理する強力なデータ構造。",
+        "atcoderProblems": [
+            {"name": "DSL_2_A - Range Minimum Query (RMQ)", "url": "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_A"}
+        ]
+    },
+    {
+        "name": "BIT / Fenwick木", "rarity": "UR", "rarityJP": "ウルトラレア", "color": "var(--rarity-ur)", "weight": 7,
+        "description": "点更新と区間和を対数時間で処理。",
+        "atcoderProblems": [
+            {"name": "ABC185F - Range Xor Query", "url": "https://atcoder.jp/contests/abc185/tasks/abc185_f"}
+        ]
+    },
+    {
+        "name": "ローリングハッシュ", "rarity": "UR", "rarityJP": "ウルトラレア", "color": "var(--rarity-ur)", "weight": 6,
+        "description": "文字列の一致判定を高速に行う。",
+        "atcoderProblems": [
+            {"name": "ABC141E - Who Says a Pun?", "url": "https://atcoder.jp/contests/abc141/tasks/abc141_e"}
+        ]
+    },
+    {
+        "name": "強連結成分分解 (SCC)", "rarity": "UR", "rarityJP": "ウルトラレア", "color": "var(--rarity-ur)", "weight": 5,
+        "description": "有向グラフを相互到達可能な部分グラフに分解。",
+        "atcoderProblems": [
+            {"name": "典型90問 021 - Come Back in One Piece（★5）", "url": "https://atcoder.jp/contests/typical90/tasks/typical90_u"}
+        ]
+    },
+    {
+        "name": "HL分解", "rarity": "LR", "rarityJP": "レジェンダリー", "color": "var(--rarity-lr)", "weight": 2,
+        "description": "木上のパスに対するクエリを効率化。",
+        "atcoderProblems": [
+            {"name": "AOJ GRL_5_D - Range Query on a Tree II", "url": "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_5_D"}
+        ]
+    },
+    {
+        "name": "高度なフロー", "rarity": "LR", "rarityJP": "レジェンダリー", "color": "var(--rarity-lr)", "weight": 2,
+        "description": "ネットワークフローの応用問題 (Min-Cost Max-Flowなど)。",
+        "atcoderProblems": [
+            {"name": "ABC010D - 浮気予防", "url": "https://atcoder.jp/contests/abc010/tasks/abc010_4"}
+        ]
+    },
+    {
+        "name": "形式的冪級数 (FPS)", "rarity": "LR", "rarityJP": "レジェンダリー", "color": "var(--rarity-lr)", "weight": 1,
+        "description": "母関数を用いた数え上げ問題の強力な武器。",
+        "atcoderProblems": [
+            {"name": "典型90問 023 - Avoid War（★7）", "url": "https://atcoder.jp/contests/typical90/tasks/typical90_w"}
+        ]
+    },
+    {
+        "name": "畳み込み (Convolution)", "rarity": "LR", "rarityJP": "レジェンダリー", "color": "var(--rarity-lr)", "weight": 2,
+        "description": "NTT/FFTを用いた多項式乗算。DP高速化にも。",
+        "atcoderProblems": [
+            {"name": "典型90問 015 - Don't be too close（★7）", "url": "https://atcoder.jp/contests/typical90/tasks/typical90_o"}
+        ]
+    },
+    {
+        "name": "セグ木上のDP", "rarity": "LR", "rarityJP": "レジェンダリー", "color": "var(--rarity-lr)", "weight": 1,
+        "description": "データ構造を駆使した複雑なDPの最適化 (遅延セグ木応用など)。",
+        "atcoderProblems": [
+            {"name": "ARC070E - NarrowRectangles", "url": "https://atcoder.jp/contests/arc070/tasks/arc070_c"}
+        ]
+    }
+]

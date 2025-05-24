@@ -1,53 +1,49 @@
+
+interface AtCoderProblem {
+    name: string;
+    url: string;
+}
+
 interface Solution {
     name: string;
     rarity: "C" | "R" | "SR" | "UR" | "LR";
     rarityJP: string;
-    color: string;
+    color: string; // This will be the CSS variable string like 'var(--rarity-c)'
     weight: number;
     description?: string;
+    atcoderProblems?: AtCoderProblem[];
 }
 
-const solutions: Solution[] = [
-    // Common (コモン)
-    { name: "全探索", rarity: "C", rarityJP: "コモン", color: "var(--rarity-c)", weight: 50, description: "すべての可能性を試す基本的な手法。"},
-    { name: "貪欲法 (Greedy)", rarity: "C", rarityJP: "コモン", color: "var(--rarity-c)", weight: 50, description: "その場での最善手を選び続ける戦略。"},
-    { name: "シミュレーション", rarity: "C", rarityJP: "コモン", color: "var(--rarity-c)", weight: 50, description: "問題の指示通りに処理を追う。"},
-    { name: "ソート", rarity: "C", rarityJP: "コモン", color: "var(--rarity-c)", weight: 40, description: "データを特定の順序に並び替える。"},
-    { name: "二分探索", rarity: "C", rarityJP: "コモン", color: "var(--rarity-c)", weight: 40, description: "ソート済み配列から効率的に要素を検索。"},
+let solutions: Solution[] = [];
+let totalWeight = 0;
+let pulledCardsHistory: Solution[] = [];
+const MAX_HISTORY_SIZE = 50;
 
-    // Rare (レア)
-    { name: "しゃくとり法", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 30, description: "2つのポインタで範囲を効率的に走査。"},
-    { name: "累積和", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 30, description: "区間和を高速に求める前処理。"},
-    { name: "いもす法 (imos)", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 25, description: "区間への加算を効率的に処理。"},
-    { name: "動的計画法 (DP)", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 30, description: "部分問題の結果を再利用して最適解を導く。"},
-    { name: "Union-Find木", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 25, description: "グループ分けを効率的に管理するデータ構造。"},
-    { name: "幅優先探索 (BFS)", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 25, description: "グラフを層ごとに探索。最短経路問題に。"},
-    { name: "深さ優先探索 (DFS)", rarity: "R", rarityJP: "レア", color: "var(--rarity-r)", weight: 25, description: "グラフを深く探索。連結性判定などに。"},
+async function loadSolutions(): Promise<void> {
+    try {
+        const response = await fetch('solutions.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        solutions = await response.json();
+        totalWeight = solutions.reduce((sum, s) => sum + s.weight, 0);
+    } catch (error) {
+        console.error("Failed to load solutions:", error);
+        solutions = []; 
+    }
+}
 
-    // Super Rare (スーパーレア)
-    { name: "ダイクストラ法", rarity: "SR", rarityJP: "スーパーレア", color: "var(--rarity-sr)", weight: 15, description: "単一始点の非負重み付きグラフ最短経路。"},
-    { name: "ワーシャルフロイド法", rarity: "SR", rarityJP: "スーパーレア", color: "var(--rarity-sr)", weight: 15, description: "全点対最短経路を求めるアルゴリズム。"},
-    { name: "最小全域木 (MST)", rarity: "SR", rarityJP: "スーパーレア", color: "var(--rarity-sr)", weight: 15, description: "グラフの全頂点を連結する最小コストの辺集合。"},
-    { name: "トポロジカルソート", rarity: "SR", rarityJP: "スーパーレア", color: "var(--rarity-sr)", weight: 12, description: "有向非巡回グラフの頂点を順序付け。"},
-    { name: "桁DP", rarity: "SR", rarityJP: "スーパーレア", color: "var(--rarity-sr)", weight: 12, description: "数値の桁ごとに状態を持つDP。"},
-
-    // Ultra Rare (ウルトラレア)
-    { name: "セグメント木", rarity: "UR", rarityJP: "ウルトラレア", color: "var(--rarity-ur)", weight: 7, description: "区間クエリを対数時間で処理する強力なデータ構造。"},
-    { name: "BIT / Fenwick木", rarity: "UR", rarityJP: "ウルトラレア", color: "var(--rarity-ur)", weight: 7, description: "点更新と区間和を対数時間で処理。"},
-    { name: "ローリングハッシュ", rarity: "UR", rarityJP: "ウルトラレア", color: "var(--rarity-ur)", weight: 6, description: "文字列の一致判定を高速に行う。"},
-    { name: "強連結成分分解 (SCC)", rarity: "UR", rarityJP: "ウルトラレア", color: "var(--rarity-ur)", weight: 5, description: "有向グラフを相互到達可能な部分グラフに分解。"},
-
-    // Legendary Rare (レジェンダリーレア)
-    { name: "HL分解", rarity: "LR", rarityJP: "レジェンダリー", color: "var(--rarity-lr)", weight: 2, description: "木上のパスに対するクエリを効率化。"},
-    { name: "高度なフロー", rarity: "LR", rarityJP: "レジェンダリー", color: "var(--rarity-lr)", weight: 2, description: "ネットワークフローの応用問題 (Min-Cost Max-Flowなど)。"},
-    { name: "形式的冪級数 (FPS)", rarity: "LR", rarityJP: "レジェンダリー", color: "var(--rarity-lr)", weight: 1, description: "母関数を用いた数え上げ問題の強力な武器。"},
-    { name: "畳み込み (Convolution)", rarity: "LR", rarityJP: "レジェンダリー", color: "var(--rarity-lr)", weight: 2, description: "NTT/FFTを用いた多項式乗算。DP高速化にも。"},
-    { name: "セグ木上のDP", rarity: "LR", rarityJP: "レジェンダリー", color: "var(--rarity-lr)", weight: 1, description: "データ構造を駆使した複雑なDPの最適化 (遅延セグ木応用など)。"}
-];
-
-const totalWeight = solutions.reduce((sum, s) => sum + s.weight, 0);
+function addSolutionToHistory(solution: Solution): void {
+    pulledCardsHistory.unshift(solution);
+    if (pulledCardsHistory.length > MAX_HISTORY_SIZE) {
+        pulledCardsHistory.pop(); 
+    }
+}
 
 function selectSolution(): Solution {
+    if (solutions.length === 0) {
+        throw new Error("Solutions not loaded yet or empty.");
+    }
     let randomWeight = Math.random() * totalWeight;
     for (const solution of solutions) {
         if (randomWeight < solution.weight) {
@@ -55,34 +51,40 @@ function selectSolution(): Solution {
         }
         randomWeight -= solution.weight;
     }
-    // Fallback, should ideally not be reached if weights are correct
-    return solutions[solutions.length - 1];
+    return solutions[solutions.length - 1]; // Fallback
 }
 
-function displaySolution(solution: Solution, resultArea: HTMLElement) {
-    resultArea.innerHTML = ''; // Clear previous result or placeholder
-
+function createSolutionCardElement(solution: Solution): HTMLElement {
     const card = document.createElement('div');
-    card.classList.add('result-card', `rarity-${solution.rarity}`);
-    // card.style.borderColor = solution.color; // Using CSS class for border-left
+    card.classList.add('result-card', `rarity-${solution.rarity.toLowerCase()}`);
+    card.style.setProperty('--rarity-color', solution.color);
 
-    const rarityBanner = document.createElement('div');
-    rarityBanner.classList.add('rarity-banner');
-    rarityBanner.textContent = solution.rarity;
-    // Rarity banner color is handled by CSS class: .rarity-X .rarity-banner
+    const cardHeader = document.createElement('div');
+    cardHeader.classList.add('card-header');
+
+    const rarityTagIndicator = document.createElement('div');
+    rarityTagIndicator.classList.add('rarity-tag-indicator');
+    rarityTagIndicator.textContent = solution.rarity;
+    // Rarity specific tag styling is primarily handled by CSS via .rarity-X .rarity-tag-indicator
+
+    const rarityTextElement = document.createElement('p');
+    rarityTextElement.classList.add('solution-rarity-text');
+    rarityTextElement.textContent = solution.rarityJP;
+    
+    cardHeader.appendChild(rarityTagIndicator);
+    cardHeader.appendChild(rarityTextElement);
+
 
     const nameElement = document.createElement('h2');
     nameElement.classList.add('solution-name');
     nameElement.textContent = solution.name;
-
-    const rarityTextElement = document.createElement('p');
-    rarityTextElement.classList.add('solution-rarity-text');
-    rarityTextElement.textContent = `[${solution.rarityJP}]`;
-    // Rarity text color is handled by CSS class: .rarity-X .solution-rarity-text
-
-    card.appendChild(rarityBanner);
+    if (solution.rarity === "LR") {
+        nameElement.classList.add('lr-name-effect');
+    }
+    
+    card.appendChild(cardHeader); // Add header first
     card.appendChild(nameElement);
-    card.appendChild(rarityTextElement);
+    // Removed rarityTextElement from here as it's now in header
 
     if (solution.description) {
         const descriptionElement = document.createElement('p');
@@ -91,34 +93,167 @@ function displaySolution(solution: Solution, resultArea: HTMLElement) {
         card.appendChild(descriptionElement);
     }
 
-    resultArea.appendChild(card);
+    if (solution.atcoderProblems && solution.atcoderProblems.length > 0) {
+        const problemsTitle = document.createElement('h3');
+        problemsTitle.classList.add('atcoder-problems-title');
+        problemsTitle.textContent = '関連するAtCoder問題';
+        card.appendChild(problemsTitle);
+
+        const problemsList = document.createElement('ul');
+        problemsList.classList.add('atcoder-problems-list');
+        solution.atcoderProblems.forEach(problem => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = problem.url;
+            link.textContent = problem.name;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            listItem.appendChild(link);
+            problemsList.appendChild(listItem);
+        });
+        card.appendChild(problemsList);
+    }
+    return card;
 }
 
+function displaySingleSolution(solution: Solution, resultArea: HTMLElement) {
+    const cardElement = createSolutionCardElement(solution);
+    resultArea.appendChild(cardElement);
+}
 
-document.addEventListener('DOMContentLoaded', () => {
+function createMiniCardElement(solution: Solution): HTMLElement {
+    const miniCard = document.createElement('div');
+    miniCard.classList.add('mini-result-card', `rarity-${solution.rarity.toLowerCase()}`);
+    miniCard.style.setProperty('--rarity-color', solution.color);
+    miniCard.setAttribute('role', 'listitem');
+    miniCard.setAttribute('aria-label', `${solution.name} (${solution.rarityJP})`);
+
+    const rarityTagIndicator = document.createElement('div');
+    rarityTagIndicator.classList.add('rarity-tag-indicator');
+    rarityTagIndicator.textContent = solution.rarity;
+    miniCard.appendChild(rarityTagIndicator);
+
+
+    const nameElement = document.createElement('h3'); 
+    nameElement.classList.add('mini-solution-name');
+    nameElement.textContent = solution.name;
+    if (solution.rarity === "LR") {
+        nameElement.classList.add('lr-name-effect');
+    }
+    miniCard.appendChild(nameElement);
+
+    const rarityTextElement = document.createElement('p');
+    rarityTextElement.classList.add('mini-solution-rarity-text');
+    rarityTextElement.textContent = solution.rarityJP;
+    miniCard.appendChild(rarityTextElement);
+    
+    return miniCard;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     const pullButton = document.getElementById('pull-gacha-button') as HTMLButtonElement;
+    // pullFourButton is removed
     const resultArea = document.getElementById('gacha-result-area') as HTMLElement;
-    const animationArea = document.getElementById('gacha-animation-area') as HTMLElement;
+    const placeholder = document.getElementById('gacha-placeholder') as HTMLElement;
 
-    if (!pullButton || !resultArea || !animationArea) {
-        console.error('Required DOM elements not found.');
+    const viewHistoryButton = document.getElementById('view-history-button') as HTMLButtonElement;
+    const historyModal = document.getElementById('history-modal') as HTMLElement;
+    const historyContent = document.getElementById('history-content') as HTMLElement;
+    const closeHistoryButton = document.getElementById('close-history-button') as HTMLButtonElement;
+
+    // Check for essential elements
+    if (!pullButton || !resultArea || !placeholder || 
+        !viewHistoryButton || !historyModal || !historyContent || !closeHistoryButton) {
+        console.error('Required DOM elements not found. Check IDs.');
+        if(placeholder) placeholder.innerHTML = `<p class="error-message">アプリの初期化に失敗しました。重要な要素が見つかりません。</p>`;
+        else console.error("Placeholder element itself is missing.");
         return;
+    }
+    
+    resultArea.style.display = 'none';
+    placeholder.style.display = 'flex'; 
+    placeholder.innerHTML = `<p>データ準備中...</p><div class="loading-spinner"></div>`;
+    pullButton.disabled = true; // Disable initially
+    viewHistoryButton.disabled = true;
+
+
+    await loadSolutions();
+
+    if (solutions.length > 0 && totalWeight > 0) {
+        resultArea.style.display = 'none';
+        placeholder.style.display = 'flex';
+        placeholder.innerHTML = `<p>下のボタンを押して<br/>解法を召喚しよう！</p>`;
+        pullButton.disabled = false;
+        viewHistoryButton.disabled = false;
+    } else {
+        resultArea.style.display = 'none';
+        placeholder.style.display = 'flex';
+        placeholder.innerHTML = `<p class="error-message">解法データの読み込みに失敗しました。<br/>ページを再読み込みしてください。</p>`;
+        pullButton.disabled = true;
+        viewHistoryButton.disabled = true;
+        return; 
     }
 
     pullButton.addEventListener('click', async () => {
         pullButton.disabled = true;
-        resultArea.style.opacity = '0'; // Fade out previous result
-        animationArea.classList.remove('hidden');
+        viewHistoryButton.disabled = true;
 
-        // Simulate animation time
-        await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000)); // 2-3 seconds
-
-        const chosenSolution = selectSolution();
+        placeholder.style.display = 'none';
+        resultArea.innerHTML = ''; 
+        resultArea.style.display = 'flex'; // For centering single card
         
-        animationArea.classList.add('hidden');
-        resultArea.style.opacity = '1'; // Fade in new result
-        displaySolution(chosenSolution, resultArea);
+        try {
+            const chosenSolution = selectSolution();
+            addSolutionToHistory(chosenSolution);
+            displaySingleSolution(chosenSolution, resultArea);
+        } catch (error) {
+            console.error("Error selecting solution:", error);
+            resultArea.style.display = 'none';
+            placeholder.style.display = 'flex';
+            placeholder.innerHTML = `<p class="error-message">エラーが発生しました。</p>`;
+        }
         
         pullButton.disabled = false;
+        viewHistoryButton.disabled = false;
+    });
+
+    // pullFourButton event listener is removed
+
+    viewHistoryButton.addEventListener('click', () => {
+        historyContent.innerHTML = ''; 
+        if (pulledCardsHistory.length === 0) {
+            const noHistoryMessage = document.createElement('p');
+            noHistoryMessage.textContent = '召喚履歴はまだありません。';
+            historyContent.appendChild(noHistoryMessage);
+        } else {
+            const gridContainer = document.createElement('div');
+            gridContainer.classList.add('results-grid'); 
+            gridContainer.setAttribute('role', 'list');
+            pulledCardsHistory.forEach(solution => {
+                gridContainer.appendChild(createMiniCardElement(solution));
+            });
+            historyContent.appendChild(gridContainer);
+        }
+        historyModal.classList.remove('hidden');
+        closeHistoryButton.focus();
+    });
+
+    closeHistoryButton.addEventListener('click', () => {
+        historyModal.classList.add('hidden');
+        viewHistoryButton.focus(); 
+    });
+
+    historyModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            historyModal.classList.add('hidden');
+            viewHistoryButton.focus();
+        }
+    });
+
+    historyModal.addEventListener('click', (event) => {
+        if (event.target === historyModal) {
+            historyModal.classList.add('hidden');
+            viewHistoryButton.focus();
+        }
     });
 });
