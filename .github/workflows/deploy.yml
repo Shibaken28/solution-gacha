@@ -1,44 +1,43 @@
 name: Deploy to GitHub Pages
 
 on:
+  # mainブランチへのプッシュ時にワークフローを実行
   push:
     branches:
-      - main # mainブランチにプッシュされたときに実行 (適宜変更してください)
+      - main
+  # Actionsタブから手動でワークフローを実行できるようにする
+  workflow_dispatch:
 
+# GITHUB_TOKEN の権限を設定して、GitHub Pages へのデプロイを許可する
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 1つのコンカレントなデプロイメントのみを許可し、進行中の実行と最新のキューに入れられた実行の間でキューに入れられた実行をスキップする。
+# ただし、これらの本番デプロイメントを完了させるために、進行中の実行をキャンセルしないでください。
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # 🎯 プロジェクトで使用しているNode.jsのバージョンに合わせてください
+          node-version: '20' # プロジェクトで使用しているNode.jsのバージョンに合わせてください
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci # package-lock.json があれば npm ci、なければ npm install
+        run: npm ci # `npm install` の代わりに `npm ci` を使用すると、よりクリーンで再現性の高いインストールが可能です
 
-      - name: Build project
-        run: npm run build # 🎯 package.json の scripts に定義されたビルドコマンド
-        env:
-          # 🎯 GitHub Pagesがリポジトリ名のサブディレクトリになる場合、
-          #    ビルドプロセスでベースパスの指定が必要なことがあります。
-          #    例: BASE_URL: /${{ github.event.repository.name }}/
-          #    この環境変数をビルドスクリプトや設定ファイル (例: WebpackのpublicPath) で
-          #    利用できるようにする必要があるかもしれません。
-          #    もしビルドツール (Webpack, Rollup, Parcelなど) を使用している場合、
-          #    その設定ファイルで出力パスを調整することが一般的です。
+      - name: Build application
+        run: npm run build # これで index.js が生成されます
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -46,9 +45,17 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 🎯 ビルド成果物が出力されるフォルダを指定してください
-          path: ./dist # 例: ./public, ./build, ./app など
+          # デプロイする静的ファイルが含まれるディレクトリのパス
+          # index.html, index.css, 生成された index.js がルートにあるため、カレントディレクトリを指定
+          path: '.'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
